@@ -1,8 +1,6 @@
 import logging
-from xeniaSQLAlchemy import xeniaAlchemy, multi_obs, platform
-
-from xeniaSQLiteAlchemy import xeniaAlchemy as xeniaSQLiteAlchemy
-from xeniaSQLiteAlchemy import xeniaAlchemy as sl_xeniaAlchemy, multi_obs as sl_multi_obs, platform as sl_platform
+from .xeniaSQLAlchemy import xeniaAlchemy
+from .xeniaSQLiteAlchemy import xeniaAlchemy as sl_xeniaAlchemy, multi_obs as sl_multi_obs, platform as sl_platform
 
 from datetime import datetime
 import json
