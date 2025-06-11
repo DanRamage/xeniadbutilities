@@ -16,6 +16,9 @@ from sqlalchemy import exc
 from sqlalchemy.orm.exc import *
 import logging.config
 from datetime import datetime
+
+from sqlalchemy.orm.sync import update
+
 from .stats import vectorMagDir
 
 Base = declarative_base()
@@ -851,6 +854,32 @@ class xeniaAlchemy(object):
       if(self.logger != None):
         self.logger.error("Record already exists.")
         #self.logger.exception(e)
+    return(rec.row_id)
+
+  def add_or_update_record(self, rec, update_if_exists=True, commit=False):
+    try:
+      self.session.add(rec)
+      if(commit):
+        self.session.commit()
+    #Trying to add record that already exists.
+    except exc.IntegrityError as e:
+      self.session.rollback()
+      if update_if_exists:
+        self.logger.info("Record already exists, updating it.")
+        try:
+          update_stmt = (
+            update(multi_obs)
+            .where(multi_obs.m_date == rec.m_date)
+            .where(multi_obs.platform_handle == rec.platform_handle)
+          )
+          self.session.execute(update_stmt)
+          if commit:
+            self.session.commit()
+        except Exception as e:
+          self.session.rollback()
+          self.logger.exception(e)
+      else:
+        self.logger.warning("Record already exists.")
     return(rec.row_id)
 
 
