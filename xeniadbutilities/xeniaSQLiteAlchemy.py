@@ -868,17 +868,12 @@ class xeniaAlchemy(object):
         self.logger.info("Record already exists, updating it.")
         try:
           #Pull the record from the DB
-          current_rec = self.session.query(rec).one()
-
-          update_stmt = (
-            update(multi_obs)
-            .where(multi_obs.m_date == rec.m_date)
-            .where(multi_obs.platform_handle == rec.platform_handle)
-            .values(m_value = rec.m_value)
-          )
-          self.session.execute(update_stmt)
-          if commit:
-            self.session.commit()
+          current_rec = self.session.query(multi_obs)\
+            .where(multi_obs.m_date == rec.m_date)\
+            .where(multi_obs.platform_handle == rec.platform_handle)\
+            .one()
+          current_rec.m_value = rec.m_value
+          self.session.commit()
         except Exception as e:
           self.session.rollback()
           self.logger.exception(e)
