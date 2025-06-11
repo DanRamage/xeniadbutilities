@@ -871,6 +871,7 @@ class xeniaAlchemy(object):
             update(multi_obs)
             .where(multi_obs.m_date == rec.m_date)
             .where(multi_obs.platform_handle == rec.platform_handle)
+            .values(m_value = rec.m_value)
           )
           self.session.execute(update_stmt)
           if commit:
