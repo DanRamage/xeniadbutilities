@@ -6,12 +6,12 @@ Changes: Fixed up variable name in except handler
 """
 import time
 
-from sqlalchemy import Table, Column, Integer, String, MetaData, Float, func
+from sqlalchemy import Column, Integer, String, MetaData, Float, func, update
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship
 from sqlalchemy import exc
 from sqlalchemy.orm.exc import *
 import logging.config
