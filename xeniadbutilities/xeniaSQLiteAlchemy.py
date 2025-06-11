@@ -867,6 +867,9 @@ class xeniaAlchemy(object):
       if update_if_exists:
         self.logger.info("Record already exists, updating it.")
         try:
+          #Pull the record from the DB
+          current_rec = self.session.query(rec).one()
+
           update_stmt = (
             update(multi_obs)
             .where(multi_obs.m_date == rec.m_date)
