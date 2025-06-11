@@ -858,9 +858,12 @@ class xeniaAlchemy(object):
 
   def add_or_update_record(self, rec, update_if_exists=True, commit=False):
     try:
+      row_id = None
       self.session.add(rec)
       if(commit):
         self.session.commit()
+      row_id = rec.row_id
+
     #Trying to add record that already exists.
     except exc.IntegrityError as e:
       self.session.rollback()
@@ -874,12 +877,14 @@ class xeniaAlchemy(object):
             .one()
           current_rec.m_value = rec.m_value
           self.session.commit()
+          row_id = current_rec.row_id
+
         except Exception as e:
           self.session.rollback()
           self.logger.exception(e)
       else:
         self.logger.warning("Record already exists.")
-    return(rec.row_id)
+    return row_id
 
 
   def addPlatform(self, platformRec, commit=False):
