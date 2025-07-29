@@ -7,8 +7,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-pytz = "^2024.1"
-sqlalchemy = "^2.0.32"
+pytz = ">=2024.1"
+sqlalchemy = ">^2.0.32"
 geoalchemy2 = "^0.15.2"
 
 
