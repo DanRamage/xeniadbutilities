@@ -40,8 +40,6 @@ class DatabaseConfiguration:
                 self.connectionstring = config_file.get("Database", "connectionstring")
 
             elif self.db_type == "sqlite":
-                config_file = SafeConfigParser()
-                config_file.read(kwargs['ini_file'])
                 self.file_path = kwargs.get("Database", "file_path")
 
             else:
