@@ -10,7 +10,7 @@ class DatabaseConfiguration:
                 self.password = kwargs.get("password")
                 self.host = kwargs.get("host", "localhost")
                 self.port = kwargs.get("port", 5432)
-                self.database = kwargs.get("database")
+                self.database_name = kwargs.get("database_name")
             else:
                 config_file = SafeConfigParser()
                 config_file.read(kwargs['ini_file'])
@@ -18,7 +18,7 @@ class DatabaseConfiguration:
                 self.password = config_file.get("Database","password")
                 self.host = config_file.get("Database","host")
                 self.port = config_file.get("Database","port")
-                self.database = config_file.get("Database", "name")
+                self.database_name = config_file.get("Database", "name")
                 self.connectionstring = config_file.get("Database", "connectionstring")
 
         elif self.db_type == "sqlite":
