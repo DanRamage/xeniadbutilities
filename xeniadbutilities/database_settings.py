@@ -11,6 +11,7 @@ class DatabaseConfiguration:
                 self.host = kwargs.get("host", "localhost")
                 self.port = kwargs.get("port", 5432)
                 self.database_name = kwargs.get("database_name")
+                self.connectionstring = kwargs.get("connectionstring", None)
             else:
                 config_file = SafeConfigParser()
                 config_file.read(kwargs['ini_file'])
