@@ -21,10 +21,9 @@ class MultiProcessDataSaver(Process):
         self._database_connection = None
 
     def run(self):
-        logger = None
+        logger = logging.getLogger(__name__)
         try:
-            logger = logging.getLogger(__name__)
-
+            logger.info(f"{current_process()} data saver started.")
             process_data = True
             db = None
             if self.database_configuration.db_type == "postgres":
@@ -90,8 +89,10 @@ class MultiProcessDataSaver(Process):
                         process_data = False
                         db.session.commit()
 
-                    db.disconnect()
+                db.disconnect()
                 logger.debug(f"{current_process().name} completed in {time.time() - start_time} seconds.")
 
         except Exception as e:
             logger.exception(e)
+            if db is not None:
+                db.disconnect()
