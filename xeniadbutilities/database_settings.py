@@ -30,8 +30,8 @@ class DatabaseConfiguration:
         else:
             config_file = SafeConfigParser()
             config_file.read(kwargs['ini_file'])
-            db_type = config_file.get('Database', 'db_type')
-            if db_type == "postgres":
+            self.db_type = config_file.get('Database', 'db_type')
+            if self.db_type == "postgres":
                 self.username = config_file.get("Database", "user")
                 self.password = config_file.get("Database","password")
                 self.host = config_file.get("Database","host")
