@@ -1,1 +1,5 @@
-__version__  = "0.1.13"
+import logging.config
+
+__version__  = "0.2.0"
+
+logger = logging.getLogger(__name__)
