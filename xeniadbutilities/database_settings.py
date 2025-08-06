@@ -1,15 +1,34 @@
+from configparser import SafeConfigParser
+
 class DatabaseConfiguration:
     def __init__(self, db_type, **kwargs):
         self.db_type = db_type.lower()
 
         if self.db_type == "postgres":
-            self.username = kwargs.get("username")
-            self.password = kwargs.get("password")
-            self.host = kwargs.get("host", "localhost")
-            self.port = kwargs.get("port", 5432)
-            self.database = kwargs.get("database")
+            if 'ini_file' not in kwargs:
+                self.username = kwargs.get("username")
+                self.password = kwargs.get("password")
+                self.host = kwargs.get("host", "localhost")
+                self.port = kwargs.get("port", 5432)
+                self.database = kwargs.get("database")
+            else:
+                config_file = SafeConfigParser()
+                config_file.read(kwargs['ini_file'])
+                self.username = config_file.get("Database", "user")
+                self.password = config_file.get("Database","password")
+                self.host = config_file.get("Database","host")
+                self.port = config_file.get("Database","port")
+                self.database = config_file.get("Database", "name")
+                self.connectionstring = config_file.get("Database", "connectionstring")
+
         elif self.db_type == "sqlite":
-            self.file_path = kwargs.get("file_path")
+            if 'ini_file' not in kwargs:
+                self.file_path = kwargs.get("file_path")
+            else:
+                config_file = SafeConfigParser()
+                config_file.read(kwargs['ini_file'])
+                self.file_path = kwargs.get("Database", "file_path")
+
         else:
             raise ValueError("Unsupported database type. Use 'postgres' or 'sqlite'.")
 
