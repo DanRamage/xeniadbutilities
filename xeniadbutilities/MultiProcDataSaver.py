@@ -36,7 +36,7 @@ class MultiProcessDataSaver(Process):
                 start_time = time.time()
                 rec_count = 0
                 while process_data:
-                    data_rec = self._data_queue.get()
+                    data_rec = self.data_queue.get()
                     if data_rec is not None:
                         try:
                             db.session.add(data_rec)
@@ -51,7 +51,7 @@ class MultiProcessDataSaver(Process):
 
                             if ((rec_count % 10) == 0):
                                 try:
-                                    logger.debug(f"Approximate record count in DB queue: {self._data_queue.qsize()}")
+                                    logger.debug(f"Approximate record count in DB queue: {self.data_queue.qsize()}")
                                 # We get this exception under OSX.
                                 except NotImplementedError:
                                     pass
