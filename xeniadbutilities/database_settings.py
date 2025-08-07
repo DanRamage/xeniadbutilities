@@ -40,7 +40,7 @@ class DatabaseConfiguration:
                 self.connectionstring = config_file.get("Database", "connectionstring")
 
             elif self.db_type == "sqlite":
-                self.file_path = kwargs.get("Database", "file_path")
+                self.file_path = config_file.get("Database", "file_path")
 
             else:
                 raise ValueError("Unsupported database type. Use 'postgres' or 'sqlite'.")
