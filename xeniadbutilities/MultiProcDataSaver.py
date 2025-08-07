@@ -4,8 +4,7 @@ import time
 from sqlalchemy import exc
 
 from .database_settings import DatabaseConfiguration
-from .xeniaSQLiteAlchemy import xeniaAlchemy as sl_xeniaAlchemy
-from .xeniaSQLAlchemy import xeniaAlchemy
+from .xeniaAlchemy import xeniaAlchemy
 
 
 logger = logging.getLogger(__name__)
@@ -25,32 +24,13 @@ class MultiProcessDataSaver(Process):
         try:
             logger.info(f"{current_process()} data saver started.")
             process_data = True
-            db = None
-            if self.database_configuration.db_type == "postgres":
-                db = xeniaAlchemy()
-                if (db.connectDB(self.database_configuration.connectionstringo,
-                                 self.database_configuration.username,
-                                 self.database_configuration.password,
-                                 self.database_configuration.host,
-                                 self.database_configuration.database_name,
-                                 False)):
-                    logger.info(f"Successfully connect to DB: {self._db_name} at {self._db_host}")
-                else:
-                    logger.error(f"Unable to connect to DB: {self._db_name} at {self._db_host}. Terminating process.")
-                    process_data = False
-
-            elif self.database_configuration.db_type == "sqlite":
-                db = sl_xeniaAlchemy()
-                if (db.connectDB('sqlite',
-                                 None,
-                                 None,
-                                 self.database_configuration.db_type,
-                                 None,
-                                 False) == True):
-                    logger.info(f"Succesfully connect to DB: {self.file_path}")
-                else:
-                    logger.error(f"Unable to connect to DB: {self.file_path}. Terminating script.")
-                    process_data = False
+            db = xeniaAlchemy()
+            connection_string = db.build_connection_string(self.database_configuration)
+            if (db.connect_db(connection_string, False)):
+                logger.info(f"Successfully connect to DB: {self._db_name} at {self._db_host}")
+            else:
+                logger.error(f"Unable to connect to DB: {self._db_name} at {self._db_host}. Terminating process.")
+                process_data = False
 
             if db is not None:
                 start_time = time.time()
