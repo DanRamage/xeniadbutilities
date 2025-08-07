@@ -332,21 +332,6 @@ class xeniaAlchemy(object):
         self.connection = None
         self.logger = logger
 
-    def build_connection_string(self, database_configuration: DatabaseConfiguration):
-        connection_string = None
-        if database_configuration.db_type == 'postgres':
-            connection_string = "%s://%s:%s@%s/%s" % (database_configuration.db_type,
-                                                      database_configuration.username,
-                                                      database_configuration.password,
-                                                      database_configuration.host,
-                                                      database_configuration.database_name)
-
-        elif database_configuration.db_type ==  'sqlite':
-            connection_string = "%s:///%s" % (database_configuration.db_type,
-                                              database_configuration.db_type.db_file_name)
-
-        return connection_string
-
     def connect_db(self, connection_string, printSQL = False):
 
       try:

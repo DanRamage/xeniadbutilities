@@ -25,7 +25,7 @@ class MultiProcessDataSaver(Process):
             logger.info(f"{current_process()} data saver started.")
             process_data = True
             db = xeniaAlchemy()
-            connection_string = db.build_connection_string(self.database_configuration)
+            connection_string = self.database_configuration.get_connection_string()
             if (db.connect_db(connection_string, False)):
                 logger.info(f"Successfully connect to DB: {self._db_name} at {self._db_host}")
             else:
