@@ -199,9 +199,10 @@ class PlatformObsMap(dict):
         self.logger = logging.getLogger(__name__)
 
     def add_platform_obs_map(self, platform_handle: str, obs_map_rec: obs_map):
-        if platform_handle not in self.__getitem__(platform_handle):
+        platform_handle = self.get(platform_handle, None)
+        if platform_handle is not None:
             self.__setitem__(platform_handle, json_obs_map())
-        platform_obs_map = self.__getitem__(platform_handle)
+        platform_obs_map = self.get(platform_handle, None)
         #Check if we already have an entry.
         if platform_obs_map.get_rec_from_sensor_id(obs_map_rec.sensor_id) is None:
             platform_obs_map.add_obs(obs_map_rec)
