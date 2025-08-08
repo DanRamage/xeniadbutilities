@@ -220,10 +220,11 @@ class PlatformObsMap(dict):
     def get_platform_obs_rec(self, platform_handle: str, filter_method: str, filter_value):
         obs_rec = None
         platform_obs_map = self.get_platform_obs_map(platform_handle)
-        if filter_method == 'source_obs_name':
-            obs_rec = platform_obs_map.get_rec_from_source_name(filter_value)
-        elif filter_method == 'target_obs_name':
-            obs_rec = platform_obs_map.get_rec_from_xenia_name(filter_value)
-        elif filter_method == 'sensor_id':
-            obs_rec = platform_obs_map.get_rec_from_sensor_id(filter_value)
+        if platform_obs_map is not None:
+            if filter_method == 'source_obs_name':
+                obs_rec = platform_obs_map.get_rec_from_source_name(filter_value)
+            elif filter_method == 'target_obs_name':
+                obs_rec = platform_obs_map.get_rec_from_xenia_name(filter_value)
+            elif filter_method == 'sensor_id':
+                obs_rec = platform_obs_map.get_rec_from_sensor_id(filter_value)
         return obs_rec
