@@ -210,7 +210,7 @@ class PlatformObsMap(dict):
         return False
 
     def get_platform_obs_map(self, platform_handle: str):
-        self.get(platform_handle, None)
+        return self.get(platform_handle, None)
 
     def get_platform_obs_rec(self, platform_handle: str, filter_method: str, filter_value):
         obs_rec = None
