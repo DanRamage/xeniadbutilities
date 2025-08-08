@@ -11,13 +11,14 @@ logger = logging.getLogger(__name__)
 
 
 class MultiProcessDataSaver(Process):
-    def __init__(self, database_configuration: DatabaseConfiguration):
+    def __init__(self, database_configuration: DatabaseConfiguration, records_before_commit):
         Process.__init__(self)
         self.logger = logger
         self.data_queue = Queue()
         self._stop_event = Event()
         self.database_configuration = database_configuration
         self._database_connection = None
+        self._records_before_commit = records_before_commit
 
     def run(self):
         logger = logging.getLogger(__name__)
