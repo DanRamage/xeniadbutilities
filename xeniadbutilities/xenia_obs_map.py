@@ -188,12 +188,14 @@ class json_obs_map:
             yield obs_rec
 
 
+class SearchFilter(Enum):
+    SOURCE_OBS_NAME_FILTER = 'source_obs_name'
+    TARGET_OBS_NAME_FILTER = 'target_obs_name'
+    SENSOR_ID_FILTER = 'sensor_id'
+    M_TYPE_ID_FILTER = 'm_type_id'
+
+
 class PlatformObsMap(dict):
-    class SearchFilter(Enum):
-        SOURCE_OBS_NAME_FILTER = 'source_obs_name'
-        TARGET_OBS_NAME_FILTER = 'target_obs_name'
-        SENSOR_ID_FILTER = 'sensor_id'
-        M_TYPE_ID_FILTER = 'm_type_id'
 
     def __init__(self):
         self.logger = logging.getLogger(__name__)
@@ -216,10 +218,10 @@ class PlatformObsMap(dict):
         obs_rec = None
         platform_obs_map = self.get_platform_obs_map(platform_handle)
         if platform_obs_map is not None:
-            if filter_method == 'source_obs_name':
+            if filter_method == SearchFilter.SOURCE_OBS_NAME_FILTER:
                 obs_rec = platform_obs_map.get_rec_from_source_name(filter_value)
-            elif filter_method == 'target_obs_name':
+            elif filter_method == SearchFilter.TARGET_OBS_NAME_FILTER:
                 obs_rec = platform_obs_map.get_rec_from_xenia_name(filter_value)
-            elif filter_method == 'sensor_id':
+            elif filter_method == SearchFilter.SENSOR_ID_FILTER:
                 obs_rec = platform_obs_map.get_rec_from_sensor_id(filter_value)
         return obs_rec
