@@ -9,15 +9,54 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy import exc
 from sqlalchemy.orm.exc import *
-from geoalchemy2 import Geometry
 import logging.config
+from sqlalchemy.types import TypeDecorator, TEXT
+from geoalchemy2 import Geometry as PGGeometry
 
-from xeniadbutilities.database_settings import DatabaseConfiguration
 from .stats import vectorMagDir
 from datetime import datetime
 logger = logging.getLogger(__name__)
 
 Base = declarative_base()
+
+
+class Geometry(TypeDecorator):
+    # Underlying impl is TEXT (for SQLite fallback)
+    impl = TEXT
+    cache_ok = True
+
+    def __init__(self, geometry_type='GEOMETRY', srid=4326, **kwargs):
+        self.geometry_type = geometry_type
+        self.srid = srid
+        super().__init__(**kwargs)
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == 'postgresql':
+            # Use PostGIS geometry
+            return dialect.type_descriptor(
+                PGGeometry(self.geometry_type, srid=self.srid)
+            )
+        # default: TEXT column storing WKT
+        return dialect.type_descriptor(TEXT())
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return None
+        if dialect.name == 'sqlite':
+            # Expect either a Shapely geometry or raw WKT string
+            return getattr(value, 'wkt', value)
+        # pass through for Postgres (GeoAlchemy2 knows how to bind)
+        return value
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return None
+        if dialect.name == 'sqlite':
+            # Parse WKT back into a Shapely geometry
+            from shapely import wkt
+            return wkt.loads(value)
+        return value
+
 
 
 class organization(Base):
