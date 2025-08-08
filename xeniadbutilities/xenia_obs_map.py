@@ -174,6 +174,36 @@ class json_obs_map:
                 return obs
         return None
 
+    def get_rec_from_sensor_id(self, sensor_id):
+        obs_rec = next((obs_rec for obs_rec in self.obs if obs_rec.sensor_id == sensor_id), None)
+        if obs_rec is not None:
+            return obs_rec
+        return None
+
+    def add_obs(self, obs_map_rec: obs_map):
+        self.obs.append(obs_map_rec)
+
     def __iter__(self):
         for obs_rec in self.obs:
             yield obs_rec
+
+
+class PlatformObsMap(dict):
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+
+    def add_platform_obs_map(self, platform_handle: str, obs_map_rec: obs_map):
+        if platform_handle not in self.__getitem__(platform_handle):
+            self.__setitem__(platform_handle, json_obs_map())
+        platform_obs_map = self.__getitem__(platform_handle)
+        #Check if we already have an entry.
+        if platform_obs_map.get_rec_from_sensor_id(obs_map_rec.sensor_id) is None:
+            platform_obs_map.add_obs(obs_map_rec)
+            return True
+        return False
+
+    def get_platform_obs_map(self, platform_handle: None):
+        if platform_handle in self.__getitem__(platform_handle):
+            return self.__getitem__(platform_handle)
+        return None
+
