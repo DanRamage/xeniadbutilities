@@ -198,6 +198,10 @@ class PlatformObsMap(dict):
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
+    def __getitem__(self, key):
+        if key in self:
+            return self[key]
+        return None
     def add_platform_obs_map(self, platform_handle: str, obs_map_rec: obs_map):
         if platform_handle not in self.__getitem__(platform_handle):
             self.__setitem__(platform_handle, json_obs_map())
