@@ -1,7 +1,7 @@
 import logging
 from .xeniaSQLAlchemy import xeniaAlchemy
 from .xeniaSQLiteAlchemy import xeniaAlchemy as sl_xeniaAlchemy, multi_obs as sl_multi_obs, platform as sl_platform
-
+from enum import Enum
 from datetime import datetime
 import json
 
@@ -189,7 +189,12 @@ class json_obs_map:
 
 
 class PlatformObsMap(dict):
-    lookup_filter_types: ['source_obs_name', 'target_obs_name', 'sensor_id', 'm_type_id']
+    class SearchFilter(Enum):
+        SOURCE_OBS_NAME_FILTER = 'source_obs_name'
+        TARGET_OBS_NAME_FILTER = 'target_obs_name'
+        SENSOR_ID_FILTER = 'sensor_id'
+        M_TYPE_ID_FILTER = 'm_type_id'
+
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
