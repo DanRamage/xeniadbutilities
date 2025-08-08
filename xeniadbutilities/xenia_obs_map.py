@@ -200,7 +200,7 @@ class PlatformObsMap(dict):
 
     def add_platform_obs_map(self, platform_handle: str, obs_map_rec: obs_map):
         platform_obs_map = self.get(platform_handle, None)
-        if platform_obs_map is not None:
+        if platform_obs_map is None:
             self.__setitem__(platform_handle, json_obs_map())
             platform_obs_map = self.get(platform_handle, None)
         #Check if we already have an entry.
