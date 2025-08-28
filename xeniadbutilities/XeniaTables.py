@@ -158,7 +158,7 @@ class platform(Base):
     organization = relationship(organization)
     sensors = relationship("sensor", order_by="sensor.row_id", backref="platform")
     platform_type = relationship(platform_type)
-    metadata = relationship(platform_metadata)
+    metadata_info = relationship(platform_metadata)
 
 class uom_type(Base):
     __tablename__ = 'uom_type'
