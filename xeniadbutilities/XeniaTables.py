@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Float
+from sqlalchemy import Column, Integer, String, DateTime, Float, CHAR, DECIMAL
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
@@ -109,6 +109,28 @@ class platform_type(Base):
         self.description = description
         self.short_name = shortName
 
+class platform_metadata(Base):
+    __tablename__ = 'platform_metadata'
+    row_id = Column(Integer, primary_key=True)
+    row_entry_date = Column(DateTime(timezone=False))
+    row_update_date = Column(DateTime(timezone=False))
+
+    # Country
+    country_code = Column(CHAR(2), nullable=False)   # ISO 3166-1 alpha-2
+    country_name = Column(String(100))               # optional
+
+    # Administrative levels
+    admin_area_level_1 = Column(String(150))         # state/province/region
+    admin_area_level_2 = Column(String(150))         # county/district
+    admin_area_level_3 = Column(String(150))         # optional sub-division
+
+    # City & Locality
+    city = Column(String(150))
+    neighborhood = Column(String(150))               # optional
+    street_address = Column(String(255))             # e.g., "123 Main St"
+    postal_code = Column(String(20))
+
+    timezone = Column(String(50))
 
 class platform(Base):
     __tablename__ = 'platform'
@@ -129,14 +151,14 @@ class platform(Base):
     long_name = Column(String(200))
     description = Column(String(1000))
     url = Column(String(200))
-    metadata_id = Column(Integer)
+    metadata_id = Column(Integer, ForeignKey(platform_metadata.row_id))
     # the_geom         = GeometryColumn(Point(2))
     the_geom = Column(Geometry('Point'))
 
     organization = relationship(organization)
     sensors = relationship("sensor", order_by="sensor.row_id", backref="platform")
     platform_type = relationship(platform_type)
-
+    metadata = relationship(platform_metadata)
 
 class uom_type(Base):
     __tablename__ = 'uom_type'
