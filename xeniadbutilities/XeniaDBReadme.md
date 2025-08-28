@@ -1,5 +1,6 @@
 ## Schema
 <!-- BEGIN_SQLALCHEMY_DOCS -->
+```mermaid
 
 erDiagram
   organization {
@@ -222,5 +223,5 @@ erDiagram
   sensor ||--o{ sensor_status : sensor_id
   platform ||--o{ sensor_status : platform_id
   product_type ||--o{ timestamp_lkp : product_id
-
+```
 <!-- END_SQLALCHEMY_DOCS -->
